@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calculator</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #000;
+        color: #fff;
+        text-align: end;
+    }
+    .center-buttons{
+        text-align: center;
+    }
+    .end-buttons input[type="button"].clear{
+        height: 40px;
+        font-size: 12px;
+        height: 30px;
+    }
+    .calculator {
+        width: 300px;
+        margin: 50px auto;
+        border: 2px solid #ccc;
+        border-radius: 5px;
+        padding: 10px;
+        background-color: #222;
+    }
+    .calculator input[type="text"] {
+        width: 100%;
+        height: 60px;
+        font-size: 24px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        padding: 5px;
+        box-sizing: border-box;
+        text-align: right;
+        background-color: #444;
+        color: #333;
+        background-color: rgb(184, 255, 191);
+
+    }
+    .calculator input[type="button"]:hover{
+        background-color: #888;
+    }
+    .center-buttons input[type="button"] {
+        width: 50px;
+        height: 50px;
+        margin: 5px;
+        font-size: 18px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #555;
+        cursor: pointer;
+        color: #fff;
+    }
+    .calculator input[type="button"].operator {
+        background-color: #777;
+    }
+    .calculator input[type="button"].operator:hover {
+        background-color: #999;
+    }
+    .calculator input[type="button"].equal {
+        background-color: #ff9800;
+        color: #fff;
+    }
+    .calculator input[type="button"].equal:hover {
+        background-color: #ebae52;
+        color: #fff;
+    }
+    .calculator input[type="button"].clear {
+        background-color: #f44336;
+        color: #fff;
+    }
+    .calculator input[type="button"].clear:hover {
+        background-color: #fd6e64;
+        color: #fff;
+    }
+
+    .calculator input[type="text"].off-color {
+    background-color: rgb(64, 64, 64);
+    color: #fff;
+}
+
+.calculator input[type="text"].on-color {
+    background-color: rgb(184, 255, 191);
+    color: #333;
+}
+
+</style>
+</head>
+<body>
+
+<div class="calculator">
+    <input type="text" id="display" class="off-color">
+
+    <br>
+    <div class="end-buttons">
+        <input type="button" value="On" onclick="onCalculator()" class="clear" id="onButton">
+<input type="button" value="Off" onclick="offCalculator()" class="clear" id="offButton">
+
+    </div>
+    <br>
+    <div class="center-buttons">
+        <input type="button" value="MC" onclick="memoryClear()" class="clear">
+        <input type="button" value="M+" onclick="memoryAdd()" class="clear">
+        <input type="button" value="M-" onclick="memorySubtract()" class="clear">
+        <input type="button" value="MR" onclick="memoryRecall()" class="clear">
+        <br>
+        <input type="button" value="AC" onclick="clearAll()" class="clear">
+        <input type="button" value="sqrt" onclick="appendToDisplay('sqrt')" class="operator">
+        <input type="button" value="%" onclick="appendToDisplay('%')" class="operator">
+        <input type="button" value="DEL" onclick="deleteLast()" class="clear">
+        <br>
+        <input type="button" value="7" onclick="appendToDisplay('7')" class="">
+        <input type="button" value="8" onclick="appendToDisplay('8')" class="">
+        <input type="button" value="9" onclick="appendToDisplay('9')" class="">
+        <input type="button" value="/" onclick="appendToDisplay('/')" class="operator">
+        <br>
+        <input type="button" value="4" onclick="appendToDisplay('4')">
+        <input type="button" value="5" onclick="appendToDisplay('5')">
+        <input type="button" value="6" onclick="appendToDisplay('6')">
+        <input type="button" value="*" onclick="appendToDisplay('*')" class="operator">
+        <br>
+        <input type="button" value="1" onclick="appendToDisplay('1')">
+        <input type="button" value="2" onclick="appendToDisplay('2')">
+        <input type="button" value="3" onclick="appendToDisplay('3')">
+        <input type="button" value="-" onclick="appendToDisplay('-')" class="operator">
+        <br>
+        <input type="button" value="0" onclick="appendToDisplay('0')">
+        <input type="button" value="." onclick="appendToDisplay('.')">
+        <input type="button" value="=" onclick="calculate()" class="equal"> 
+        <input type="button" value="+" onclick="appendToDisplay('+')" class="operator">
+    </div>
+    
+</div>
+
+<script>
+       var memory = 0;
+    var displayValue = '';
+    var displayResult = false;
+    var calculatorOn = false; // Initially off
+
+    function onCalculator() {
+    var display = document.getElementById('display');
+    var buttons = document.querySelectorAll('.calculator input[type="button"]');
+    display.disabled = false;
+    display.classList.remove('off-color'); // Remove off color class
+    display.classList.add('on-color'); // Add on color class
+    display.value = '0'; // Reset display to 0
+    buttons.forEach(function(button) {
+        button.disabled = false;
+    });
+    calculatorOn = true;
+    document.getElementById('onButton').style.color = 'black'; // Set text color of "On" button to black
+    document.getElementById('offButton').style.color = 'white'; // Set text color of "Off" button to white
+    console.log("Calculator on:", calculatorOn);
+}
+
+function offCalculator() {
+    var display = document.getElementById('display');
+    var buttons = document.querySelectorAll('.calculator input[type="button"]');
+    
+    clearDisplay(); // Clear display when turning off
+    display.disabled = true;
+    display.classList.remove('on-color'); // Remove on color class
+    display.classList.add('off-color'); // Add off color class
+    display.value = ''; // Clear display value
+    buttons.forEach(function(button) {
+        if (button.value !== "On") {
+            button.disabled = true;
+        }
+    });
+    calculatorOn = false;
+    document.getElementById('offButton').style.color = 'black'; // Set text color of "Off" button to black
+    document.getElementById('onButton').style.color = 'white'; // Set text color of "On" button to white
+    console.log("Calculator off:", calculatorOn);
+}
+
+
+
+function appendToDisplay(value) {
+    var display = document.getElementById('display');
+
+    displayValue += value;
+    display.value = displayValue;
+}
+
+
+
+    function clearDisplay() {
+        displayValue = '';
+        document.getElementById('display').value = '';
+        displayResult = false;
+    }
+
+    function clearAll() {
+    clearDisplay();
+    calculatorOn = false; // Turn off calculator
+}
+
+
+    function memoryRecall() {
+        displayValue = memory.toString();
+        document.getElementById('display').value = displayValue;
+    }
+
+    function memorySubtract() {
+        memory -= parseFloat(displayValue);
+       
+    }
+
+    function memoryClear() {
+    try {
+        memory = 0;
+   
+    } catch (error) {
+        console.error("Error in memoryClear function:", error);
+        alert("An error occurred while clearing memory.");
+    }
+}
+    function memoryAdd() {
+    memory += parseFloat(displayValue);
+}
+
+
+
+    function calculate() {
+    try {
+        if (displayValue.includes('sqrt')) {
+            var value = parseFloat(displayValue.replace('sqrt', ''));
+            result = Math.sqrt(value);
+        } else if (displayValue.includes('%')) {
+            var values = displayValue.split('%');
+            var percentage = parseFloat(values[0]);
+            var number = parseFloat(values[1]);
+            result = (percentage / 100) * number;
+        } else {
+            result = eval(displayValue);
+        }
+        document.getElementById('display').value = result; // Show result in the input area
+        displayValue = result.toString(); // Update displayValue with the result
+    } catch (error) {
+        document.getElementById('display').value = 'Error';
+    }
+    
+}
+
+
+
+    function deleteLast() {
+        displayValue = displayValue.slice(0, -1);
+        document.getElementById('display').value = displayValue;
+    }
+</script>
+
+</body>
+</html>
