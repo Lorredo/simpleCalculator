@@ -93,7 +93,7 @@
 </head>
 <body>
 
-<div class="calculator">
+    <div class="calculator">
     <input type="text" id="display" class="off-color">
 
     <br>
@@ -143,9 +143,26 @@
     var displayResult = false;
     var calculatorOn = false; // Initially off
 
-    function onCalculator() {
+    window.onload = function() {
+    var buttons = document.querySelectorAll('.calculator input[type="button"]');
+    var calculatorContainer = document.getElementById('calculatorContainer');
+
+    // Disable all buttons except "On" button
+    buttons.forEach(function(button) {
+        if (button.value !== "On") {
+            button.disabled = true;
+        }
+    });
+
+    // Disable calculator container
+    calculatorContainer.disabled = true;
+}
+
+function onCalculator() {
     var display = document.getElementById('display');
     var buttons = document.querySelectorAll('.calculator input[type="button"]');
+    var calculatorContainer = document.getElementById('calculatorContainer');
+
     display.disabled = false;
     display.classList.remove('off-color'); // Remove off color class
     display.classList.add('on-color'); // Add on color class
@@ -154,6 +171,7 @@
         button.disabled = false;
     });
     calculatorOn = true;
+    calculatorContainer.disabled = false; // Enable calculator container
     document.getElementById('onButton').style.color = 'black'; // Set text color of "On" button to black
     document.getElementById('offButton').style.color = 'white'; // Set text color of "Off" button to white
     console.log("Calculator on:", calculatorOn);
@@ -162,7 +180,8 @@
 function offCalculator() {
     var display = document.getElementById('display');
     var buttons = document.querySelectorAll('.calculator input[type="button"]');
-    
+    var calculatorContainer = document.getElementById('calculatorContainer');
+
     clearDisplay(); // Clear display when turning off
     display.disabled = true;
     display.classList.remove('on-color'); // Remove on color class
@@ -174,12 +193,11 @@ function offCalculator() {
         }
     });
     calculatorOn = false;
+    calculatorContainer.disabled = true; // Disable calculator container
     document.getElementById('offButton').style.color = 'black'; // Set text color of "Off" button to black
     document.getElementById('onButton').style.color = 'white'; // Set text color of "On" button to white
     console.log("Calculator off:", calculatorOn);
 }
-
-
 
 function appendToDisplay(value) {
     var display = document.getElementById('display');
